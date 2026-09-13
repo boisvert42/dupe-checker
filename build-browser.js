@@ -2,11 +2,16 @@
 
 const esbuild = require('esbuild');
 const path = require('path');
+const { parseCompounds } = require('./parse-compounds.js');
 
 async function build() {
-  console.log('Building browser bundles...');
+  // Step 1: Ensure compounds.json is up-to-date before bundling
+  console.log('1. Parsing compounds (ensuring compounds.json is up-to-date)...');
+  parseCompounds();
 
-  // 1. Minified bundle for production
+  console.log('2. Building browser bundles...');
+
+  // Minified bundle for production
   await esbuild.build({
     entryPoints: [path.join(__dirname, 'browser.js')],
     bundle: true,
