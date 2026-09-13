@@ -48,16 +48,47 @@ Runs the test suite in `test.js` verifying suffix matching, non-dupes, base+ing 
 
 ## Building for the Browser
 
-Generate the standalone browser bundles into `dist/`:
+Generate the standalone browser bundle into `dist/`:
 
 ```bash
 npm run build:browser
 ```
 
+This automatically runs [`parse-compounds.js`](parse-compounds.js) first to ensure [`compounds.json`](compounds.json) is fresh before bundling with `esbuild`.
+
 Outputs:
 - `dist/dupe-checker.min.js`: Production minified standalone bundle.
 
 Open `index.html` in your browser to try the interactive UI.
+
+---
+
+## Managing Compound Words
+
+Duplicate detection uses [`compounds.json`](compounds.json) to decompose compound words into constituent components (e.g. `"roughhouse"` $\rightarrow$ `["rough", "house"]`, `"sandcastle"` $\rightarrow$ `["sand", "castle"]`).
+
+### Adding New Compound Words
+
+If you want to add a custom or puzzle-specific compound word:
+
+1. Open [`parse-compounds.js`](parse-compounds.js).
+2. Add your word and its parts to the `extras` dictionary:
+   ```javascript
+   const extras = {
+     hotdog: ['hot', 'dog'],
+     sandcastle: ['sand', 'castle'],
+     treehouse: ['tree', 'house'],
+     // Add your custom compound here:
+     mycompound: ['my', 'compound']
+   };
+   ```
+3. **Rebuild `compounds.json` before running CLI commands or Node scripts**:
+   ```bash
+   npm run parse:compounds
+   ```
+
+> [!NOTE]
+> `npm run build:browser` automatically executes this compound generation step before bundling, so you don't need to run it manually when preparing a browser build. However, when using `cli.js` or Node APIs directly, you **must** run `npm run parse:compounds` whenever `parse-compounds.js` or `compound_words.csv` changes.
 
 ---
 
@@ -125,6 +156,9 @@ node cli.js quick quickly --json
 # Read from a file
 node cli.js --file answers.txt
 ```
+
+> [!TIP]
+> If you add new compound words to [`parse-compounds.js`](parse-compounds.js), make sure to run `npm run parse:compounds` before running `cli.js` so [`compounds.json`](compounds.json) reflects your updates.
 
 ---
 

@@ -6283,10 +6283,6 @@
     "zoo",
     "keeper"
   ],
-  "dreamhouse": [
-    "dream",
-    "house"
-  ],
   "hotdog": [
     "hot",
     "dog"
@@ -6294,6 +6290,10 @@
   "backseat": [
     "back",
     "seat"
+  ],
+  "beeline": [
+    "bee",
+    "line"
   ],
   "cheesecake": [
     "cheese",
